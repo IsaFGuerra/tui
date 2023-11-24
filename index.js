@@ -160,76 +160,113 @@ while(true){
                     break;
                 };
                 case '4': {
-
-                        const perfil = await new Promise((resolve) => {
-                            leitor.question(`qual seu perfil?`, (answer) => resolve(answer));
+                    try{
+                        const perfil = await new Promise((resolve2) => {
+                            const aux = `
+                            Qual seu perfil?:
+                            1. Funcionário
+                            2. Gerente
+                            `;
+                            leitor.question(aux, (answer) => resolve2(answer));
                         });
-                        
-                        const id = await new Promise((resolve) => {
-                            leitor.question(`qual o id do funcionário desejado?`, (answer) => {
-                                resolve(answer);
-                            });
-                        });
-                    
-                        const aux = {
-                            id,
-                        };
-                    
-                        const url = `http://localhost:8080/refunds/${perfil}`;
-                    
-                        try {
-                            const { data } = await axios.get(url, aux);
-                            console.table(
-                                data.map((item) => {
-                                    return {
+                
+                        switch (perfil) {
+                            case '1': {
+                                const id = await new Promise((resolve) => {
+                                    leitor.question(`qual seu id?`, (answer) => resolve(answer));
+                                });
+                
+                                try {
+                                    const { data } = await axios.get(`http://localhost:8080/refunds/${id}`);
+                                    console.table(data.map((item) => ({
                                         id: item.id,
                                         description: item.description,
                                         price: item.price,
                                         status: item.status,
                                         solicitateDate: item.solicitateDate,
                                         modificationDate: item.modificationDate,
-                                    };
-                                })
-                            );
-                        } catch (error) {
-                            console.error('Erro ao obter o histórico de estorno:', error.message);
+                                    })));
+        
+                                    
+                                } catch (error) {
+                                    console.error('Erro ao retornar seu histórico de estornos', error.message);
+                                }
+                                break;
+                            };
+                            case '2': {
+                                const id = await new Promise((resolve) => {
+                                    leitor.question(`qual o id do funcionário que deseja ver o histórico de estornos?`, (answer) => resolve(answer));
+                                });
+
+                                try{
+                                    const { data } = await axios.get(`http://localhost:8080/refunds/${id}`);
+                                    console.table(data.map((item) => ({
+                                        id: item.id,
+                                        description: item.description,
+                                        price: item.price,
+                                        status: item.status,
+                                        solicitateDate: item.solicitateDate,
+                                        modificationDate: item.modificationDate,
+                                    })));
+                                }catch(error){
+                                    console.error(`Erro ao retornar o histórico de estornos do funcionário ${id}`, error.message);
+                                }
+
+                        const continueOption = await new Promise((resolve2) => {
+                            leitor.question('Deseja continuar? (S/N) ', (answer) => resolve2(answer));
+                        });
+                
+                        if (continueOption.toUpperCase() !== 'S') {
+                            console.log('Encerrando...');
+                            break;
                         }
-                    
+                
+                        console.clear();
                         resolve();
                         break;    
-                };
+                    }
+                    }
+                }catch(error){
+                    console.error('Erro ao obter dados do servidor', error.message);
+                }
+                break;
+            };
                 case '5': {
-                    const perfil = await new Promise((resolve) => {
-                        leitor.question(`qual seu perfil?`, (answer) => resolve(answer));
-                    });
-
-                    const start = await new Promise((start) => {
-                        leitor.question(`a partir de qual data deseja ver os reembolsos?`, (answer) => {
-                            start(answer);
-                        });
-                    });
-
-                    const end = await new Promise((end) => {
-                        leitor.question(`a partir de qual data deseja ver os reembolsos?`, (answer) => {
-                            end(answer);
+                        const perfil = await new Promise((resolve) => {
+                            leitor.question(`qual seu perfil?`, (answer) => resolve(answer));
                         });
 
-                    });
-
-                    const dates = {
-                        start,
-                        end
-                    }
-                    
-                    try{
-                        const { data } = await axios.post(`http://localhost:8080/list/refunds/${pefil}`, dates)
-                        console.log('Seu relatório foi gerado com sucesso! Está disponível em: ' + data.uri);
-                    }catch(error){
-                        console.error('Erro ao gerar relatório de estornos:', error.message);
-                    }
-
-                    break;
-                };
+                        if(perfil != 'MANAGER'){
+                            throw new Error(error)
+                        }
+    
+                        const startDate = await new Promise((start) => {
+                            leitor.question(`a partir de qual data deseja ver os reembolsos?`, (answer) => {
+                                start(answer);
+                            });
+                        });
+    
+                        const endDate = await new Promise((end) => {
+                            leitor.question(`a partir de qual data deseja ver os reembolsos?`, (answer) => {
+                                end(answer);
+                            });
+    
+                        });
+    
+                        const dates = {
+                            startDate,
+                            endDate
+                        }
+                        
+                        try{
+                            const { data } = await axios.post(`http://localhost:8080/list/refunds/`, dates)
+                            console.log('Seu relatório foi gerado com sucesso! Está disponível em: ' + data.uri);
+                        }catch(error){
+                            console.error('Erro ao gerar relatório de estornos:', error.message);
+                        }
+    
+                        break;
+                }
                 default: {
                     console.log('Opção inválida');
                 }
