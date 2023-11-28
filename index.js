@@ -26,7 +26,7 @@ while(true){
                 case '1': {
                         try {
                             const perfil = await new Promise((resolve) => {
-                                leitor.question(`qual seu perfil?`, (answer) => resolve(answer));
+                                leitor.question(`Qual seu perfil? `, (answer) => resolve(answer));
                             });
 
                             const { data } = await axios.get(`http://localhost:8080/list/${perfil}`);
@@ -39,9 +39,9 @@ while(true){
 
                             const approvalOption = await new Promise((resolve2) => {
                                 const aux = `
-                                digite o número correspondente a ação desejada:
-                                1. aprovar
-                                2. negar
+                                Digite o número correspondente a ação desejada:
+                                1. Aprovar
+                                2. Negar
                                 `;
                                 leitor.question(aux, (answer) => resolve2(answer));
                             });
@@ -49,7 +49,7 @@ while(true){
                             switch (approvalOption) {
                                 case '1': {
                                     const id = await new Promise((resolve) => {
-                                        leitor.question(`qual o id do reembolso a ser aprovado?`, (answer) => resolve(answer));
+                                        leitor.question(`Qual o id do reembolso a ser aprovado? `, (answer) => resolve(answer));
                                     });
                     
                                     const status = 'APPROVED';
@@ -63,14 +63,14 @@ while(true){
                                         const { data } = await axios.put(url, body);
                                         console.log('Reembolso aprovado com sucesso!');
                                     } catch (error) {
-                                        console.error('Erro ao aprovar reembolso', error.message);
+                                        console.error('Erro ao aprovar reembolso ', error.message);
                                     }
                                     break;
                                 }
                     
                                 case '2': {
                                     const id = await new Promise((resolve) => {
-                                        leitor.question(`qual o id do reembolso a ser negado?`, (answer) => resolve(answer));
+                                        leitor.question(`Qual o id do reembolso a ser negado? `, (answer) => resolve(answer));
                                     });
                     
                                     const status = 'DENIED';
@@ -84,7 +84,7 @@ while(true){
                                         const { data } = await axios.put(url, aux11);
                                         console.log('Reembolso negado com sucesso!');
                                     } catch (error) {
-                                        console.error('Erro ao negar reembolso', error.message);
+                                        console.error('Erro ao negar reembolso ', error.message);
                                     }
                                     break;
                                 }
@@ -107,7 +107,7 @@ while(true){
                 };
                 case '2': {
                     const perfil = await new Promise((resolve) => {
-                        leitor.question(`qual seu perfil?`, (answer) => resolve(answer));
+                        leitor.question(`Qual seu perfil? `, (answer) => resolve(answer));
                     });
                     try{
                         const { data } = await axios.post(`http://localhost:8080/pdf/${perfil}`)
@@ -120,23 +120,23 @@ while(true){
                 };
                 case '3': {
                     const perfil = await new Promise((resolve) => {
-                        leitor.question(`qual seu perfil?`, (answer) => resolve(answer));
+                        leitor.question(`Qual seu perfil? `, (answer) => resolve(answer));
                     });
 
                     const description = await new Promise((start) => {
-                        leitor.question(`qual a descrição?`, (answer) => {
+                        leitor.question(`Qual a descrição? `, (answer) => {
                             start(answer);
                         });
                     });
 
                     const employeeId = await new Promise((start) => {
-                        leitor.question(`qual o seu id?`, (answer) => {
+                        leitor.question(`Qual o seu id? `, (answer) => {
                             start(answer);
                         });
                     });
 
                     const price = await new Promise((start) => {
-                        leitor.question(`qual o valor?`, (answer) => {
+                        leitor.question(`Qual o valor? `, (answer) => {
                             start(answer);
                         });
                     });
@@ -150,10 +150,10 @@ while(true){
                     const url = `http://localhost:8080/refund/${perfil}`
                     try{
                         const { data } = await axios.post(url, aux)
-                        console.log('pedido de reembolso cadastrado com sucesso! Abaixo seguem as informações do pedido:')
+                        console.log('Pedido de reembolso cadastrado com sucesso! Abaixo seguem as informações do pedido: ')
                         console.log(data)
                     }catch(error){
-                        console.error('Erro ao cadastrar pedido de reembolso:', error.message);
+                        console.error('Erro ao cadastrar pedido de reembolso: ', error.message);
                     }
 
                     resolve();
@@ -173,7 +173,7 @@ while(true){
                         switch (perfil) {
                             case '1': {
                                 const id = await new Promise((resolve) => {
-                                    leitor.question(`qual seu id?`, (answer) => resolve(answer));
+                                    leitor.question(`Qual seu id? `, (answer) => resolve(answer));
                                 });
                 
                                 try {
@@ -189,13 +189,13 @@ while(true){
         
                                     
                                 } catch (error) {
-                                    console.error('Erro ao retornar seu histórico de estornos', error.message);
+                                    console.error('Erro ao retornar seu histórico de estornos ', error.message);
                                 }
                                 break;
                             };
                             case '2': {
                                 const id = await new Promise((resolve) => {
-                                    leitor.question(`qual o id do funcionário que deseja ver o histórico de estornos?`, (answer) => resolve(answer));
+                                    leitor.question(`Qual o id do funcionário que deseja ver o histórico de estornos? `, (answer) => resolve(answer));
                                 });
 
                                 try{
@@ -227,13 +227,13 @@ while(true){
                     }
                     }
                 }catch(error){
-                    console.error('Erro ao obter dados do servidor', error.message);
+                    console.error('Erro ao obter dados do servidor ', error.message);
                 }
                 break;
             };
                 case '5': {
                         const perfil = await new Promise((resolve) => {
-                            leitor.question(`qual seu perfil?`, (answer) => resolve(answer));
+                            leitor.question(`Qual seu perfil? `, (answer) => resolve(answer));
                         });
 
                         if(perfil != 'MANAGER'){
@@ -241,13 +241,13 @@ while(true){
                         }
     
                         const startDate = await new Promise((start) => {
-                            leitor.question(`a partir de qual data deseja ver os reembolsos?`, (answer) => {
+                            leitor.question(`A partir de qual data deseja ver os reembolsos? `, (answer) => {
                                 start(answer);
                             });
                         });
     
                         const endDate = await new Promise((end) => {
-                            leitor.question(`a partir de qual data deseja ver os reembolsos?`, (answer) => {
+                            leitor.question(`A partir de qual data deseja ver os reembolsos? `, (answer) => {
                                 end(answer);
                             });
     
@@ -262,7 +262,7 @@ while(true){
                             const { data } = await axios.post(`http://localhost:8080/list/refunds/`, dates)
                             console.log('Seu relatório foi gerado com sucesso! Está disponível em: ' + data.uri);
                         }catch(error){
-                            console.error('Erro ao gerar relatório de estornos:', error.message);
+                            console.error('Erro ao gerar relatório de estornos: ', error.message);
                         }
     
                         break;
